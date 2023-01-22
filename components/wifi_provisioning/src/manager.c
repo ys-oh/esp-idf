@@ -896,6 +896,13 @@ static void wifi_prov_mgr_event_handler_internal(
                         CONFIG_WIFI_PROV_AUTOSTOP_TIMEOUT);
             esp_timer_start_once(prov_ctx->autostop_timer, CONFIG_WIFI_PROV_AUTOSTOP_TIMEOUT * 1000000U);
         }
+        else {
+            /* If auto stop opion is disabled, reset provisiong
+             * state to reconfigure wifi connection.
+             */
+            ESP_LOGD(TAG, "Reset Provisioning State on Success");
+            prov_ctx->prov_state = WIFI_PROV_STATE_STARTED;
+        }
 
         /* Execute user registered callback handler */
         execute_event_cb(WIFI_PROV_CRED_SUCCESS, NULL, 0);
