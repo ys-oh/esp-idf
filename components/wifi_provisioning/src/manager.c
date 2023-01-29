@@ -1196,6 +1196,13 @@ esp_err_t wifi_prov_mgr_configure_sta(wifi_config_t *wifi_cfg)
     }
     debug_print_wifi_credentials(wifi_cfg->sta, "Received");
 
+    /* disconnect if wifi provisioning scheme for station mode.
+     */
+    wifi_mode_t scheme_wifi_mode = prov_ctx->mgr_config.scheme.wifi_mode; 
+    if (scheme_wifi_mode == WIFI_MODE_STA) {
+        esp_wifi_disconnect();
+    }
+
     /* Configure Wi-Fi as both AP and/or Station */
     if (esp_wifi_set_mode(prov_ctx->mgr_config.scheme.wifi_mode) != ESP_OK) {
         ESP_LOGE(TAG, "Failed to set Wi-Fi mode");
